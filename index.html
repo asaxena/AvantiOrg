@@ -1,0 +1,423 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Avanti Fellows — Org Charts</title>
+<style>
+  :root {
+    --bg: #ffffff;
+    --panel: #fafbfc;
+    --ink: #0f172a;
+    --muted: #64748b;
+    --line: #e5e7eb;
+    --indent: 22px;
+    --row-h: 28px;
+    --active: #16a34a;
+    --tbh: #d97706;
+    --offered: #0891b2;
+    --exit: #b91c1c;
+    --maternity: #7c3aed;
+    --unassigned: #94a3b8;
+    --ceo: #7c3aed;
+    --extmgr: #94a3b8;
+    --group: #475569;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0; min-height: 100%;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg); color: var(--ink); font-size: 13px;
+  }
+  header {
+    display: flex; align-items: center; gap: 14px; padding: 10px 18px;
+    background: var(--panel); border-bottom: 1px solid var(--line);
+    position: sticky; top: 0; z-index: 10;
+  }
+  header .brand { font-weight: 600; font-size: 14px; white-space: nowrap; }
+  header .controls {
+    display: flex; align-items: center; gap: 10px; margin-left: auto; flex-wrap: wrap;
+  }
+  header label {
+    font-size: 11px; color: var(--muted);
+    text-transform: uppercase; letter-spacing: 0.04em;
+  }
+  header select, header input[type="search"] {
+    font-size: 13px; padding: 5px 9px;
+    border: 1px solid var(--line); border-radius: 6px;
+    background: white; color: var(--ink);
+  }
+  header select { min-width: 180px; }
+  header input[type="search"] { min-width: 200px; }
+  header button {
+    font-size: 12px; padding: 5px 10px; border: 1px solid var(--line);
+    background: white; border-radius: 6px; cursor: pointer; color: var(--ink);
+  }
+  header button:hover { background: #f1f5f9; }
+
+  .subhead {
+    padding: 14px 22px 10px;
+    border-bottom: 1px solid var(--line);
+    display: flex; align-items: baseline; gap: 12px;
+  }
+  .subhead .title { font-size: 18px; font-weight: 600; }
+  .subhead .count { color: var(--muted); font-size: 13px; }
+
+  #tree { padding: 4px 0 60px; }
+
+  .row {
+    display: flex; align-items: center; gap: 8px;
+    height: var(--row-h);
+    padding-right: 18px;
+  }
+  .row:hover { background: #f8fafc; }
+  .row.hit { background: #fef9c3; }
+  .row .chevron {
+    width: 14px; flex: none; color: var(--muted);
+    cursor: pointer; user-select: none; text-align: center;
+    font-size: 9px; line-height: 1;
+  }
+  .row .chevron.empty { cursor: default; color: transparent; }
+  .row .stripe {
+    width: 3px; flex: none; height: 16px; border-radius: 2px;
+    background: var(--unassigned);
+  }
+  .row .name {
+    font-weight: 500; color: var(--ink);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .row .role {
+    color: var(--muted);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    flex: 1; min-width: 0;
+  }
+  .row .meta {
+    display: flex; gap: 8px; align-items: center;
+    font-size: 11px; color: var(--muted); white-space: nowrap;
+  }
+  .row .id {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 11px; color: #6d28d9;
+  }
+  .row .badge {
+    padding: 1px 7px; border-radius: 99px;
+    background: #f1f5f9; color: var(--muted);
+  }
+  .row .pill {
+    background: #ede9fe; color: #5b21b6;
+    padding: 1px 7px; border-radius: 99px;
+    font-size: 10px; font-weight: 600; letter-spacing: 0.03em;
+    margin-left: 6px;
+  }
+
+  /* Status accents — applied to .stripe + name */
+  .row[data-status="Active"] .stripe                     { background: var(--active); }
+  .row[data-status="Active - Role Change"] .stripe       { background: var(--active); }
+  .row[data-status="TBH"] .stripe                        { background: var(--tbh); }
+  .row[data-status="Offered"] .stripe                    { background: var(--offered); }
+  .row[data-status="Exit"] .stripe,
+  .row[data-status="Outplacement"] .stripe,
+  .row[data-status="Under Notice period"] .stripe        { background: var(--exit); }
+  .row[data-status="Maternity"] .stripe,
+  .row[data-status="Long Leave"] .stripe                 { background: var(--maternity); }
+  .row[data-status="Exit"] .name,
+  .row[data-status="Outplacement"] .name,
+  .row[data-status="Under Notice period"] .name          { color: #b91c1c; }
+  .row[data-status="TBH"] .name { color: #92400e; font-style: italic; }
+
+  /* Synthetic node kinds */
+  .row[data-kind="ceo"] .name { color: var(--ceo); font-weight: 700; }
+  .row[data-kind="ceo"] .stripe { background: var(--ceo); }
+  .row[data-kind="extmgr"] { opacity: 0.55; }
+  .row[data-kind="extmgr"] .name { font-weight: 500; color: var(--muted); }
+  .row[data-kind="extmgr"] .stripe { background: var(--extmgr); }
+  .row[data-kind="bucket"] .name { font-style: italic; color: var(--muted); }
+  .row[data-kind="bucket"] .stripe { background: var(--exit); }
+  .row[data-kind="bucket"][data-bucket="unassigned"] .stripe { background: var(--unassigned); }
+  .row[data-kind="system"] .name,
+  .row[data-kind="region"] .name,
+  .row[data-kind="centre"] .name { font-weight: 600; color: #0f172a; }
+  .row[data-kind="system"] .stripe,
+  .row[data-kind="region"] .stripe,
+  .row[data-kind="centre"] .stripe { background: var(--group); }
+  .row[data-kind="untagged"] .name { font-style: italic; color: var(--muted); font-weight: 600; }
+  .row[data-kind="untagged"] .stripe { background: var(--unassigned); }
+
+  .children.collapsed { display: none; }
+
+  .footer-meta {
+    padding: 8px 22px; color: var(--muted); font-size: 11px;
+    border-top: 1px solid var(--line);
+    background: var(--panel);
+  }
+
+  /* Print-friendly */
+  @media print {
+    header, .footer-meta { position: static; }
+    .row:hover { background: transparent; }
+    .row .chevron { display: none; }
+    .children.collapsed { display: block; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">Avanti Fellows · Org Charts</div>
+  <div class="controls">
+    <label for="family">View by</label>
+    <select id="family">
+      <option value="department_views">Department</option>
+      <option value="centre_views">Centre Category</option>
+    </select>
+    <select id="view"></select>
+    <input type="search" id="search" placeholder="Search name / AF ID / role">
+    <button id="expand">Expand all</button>
+    <button id="collapse">Collapse all</button>
+  </div>
+</header>
+<div class="subhead">
+  <div class="title" id="title"></div>
+  <div class="count" id="count"></div>
+</div>
+<div id="tree"></div>
+<div class="footer-meta" id="footer"></div>
+
+<script>
+let ORG_DATA = null;
+
+const familySelect = document.getElementById('family');
+const viewSelect   = document.getElementById('view');
+const searchInput  = document.getElementById('search');
+const treeEl       = document.getElementById('tree');
+const titleEl      = document.getElementById('title');
+const countEl      = document.getElementById('count');
+const footerEl     = document.getElementById('footer');
+
+function init() {
+  footerEl.textContent =
+    `${ORG_DATA.meta.totalEmployees} employees · ` +
+    `${ORG_DATA.meta.departments.length} departments · ` +
+    `${ORG_DATA.meta.centreTypes.length} centre categories`;
+  populateViewSelect();
+  render();
+}
+
+function escapeHtml(s) {
+  return String(s ?? '').replace(/[&<>"']/g, c =>
+    ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+function buildTree(nodes) {
+  const byId = new Map();
+  nodes.forEach(n => byId.set(n.id, Object.assign({}, n, { children: [] })));
+  const roots = [];
+  byId.forEach(n => {
+    if (n.parentId && byId.has(n.parentId)) byId.get(n.parentId).children.push(n);
+    else roots.push(n);
+  });
+  // Root order: ceo first, then groups (system), then real employees (no kind),
+  // then extmgr, then buckets last
+  const rootOrder = { ceo: 0, system: 1, extmgr: 3, untagged: 4, bucket: 5 };
+  const rootKey = n => rootOrder[n.kind] != null ? rootOrder[n.kind] : 2;
+  roots.sort((a, b) => {
+    const ka = rootKey(a), kb = rootKey(b);
+    if (ka !== kb) return ka - kb;
+    return (a.name || '').localeCompare(b.name || '');
+  });
+  // Children order: synthetic groups first; real employees by status then name
+  const statusOrder = {
+    'Active': 0, 'Active - Role Change': 0,
+    'Offered': 1,
+    'Maternity': 2, 'Long Leave': 2,
+    'Under Notice period': 3, 'Outplacement': 3, 'Exit': 3,
+    'TBH': 4
+  };
+  function sortChildren(arr) {
+    arr.sort((a, b) => {
+      if (a.isSynthetic !== b.isSynthetic) return a.isSynthetic ? -1 : 1;
+      if (!a.isSynthetic) {
+        const sa = statusOrder[a.status] != null ? statusOrder[a.status] : 2.5;
+        const sb = statusOrder[b.status] != null ? statusOrder[b.status] : 2.5;
+        if (sa !== sb) return sa - sb;
+      }
+      return (a.name || '').localeCompare(b.name || '');
+    });
+    arr.forEach(n => sortChildren(n.children));
+  }
+  roots.forEach(r => sortChildren(r.children));
+  return roots;
+}
+
+function countRealEmps(n) {
+  let c = 0;
+  for (const k of n.children) {
+    if (!k.isSynthetic) c++;
+    c += countRealEmps(k);
+  }
+  return c;
+}
+
+function renderTree(roots, defaultCollapseKinds) {
+  const out = [];
+  function walk(nodes, depth) {
+    for (const n of nodes) {
+      const hasKids = n.children.length > 0;
+      const collapsed = hasKids && defaultCollapseKinds.has(n.kind);
+      const indentPx = depth * 22 + 12;
+      const status = n.status || '';
+      const kind = n.kind || '';
+      const bucketHint = (n.id || '').endsWith('UNASSIGNED') ? 'unassigned' : 'exit';
+      const dataKind = kind ? ` data-kind="${escapeHtml(kind)}"` : '';
+      const dataStatus = status ? ` data-status="${escapeHtml(status)}"` : '';
+      const dataBucket = kind === 'bucket' ? ` data-bucket="${bucketHint}"` : '';
+      const chev = hasKids
+        ? `<span class="chevron" data-id="${escapeHtml(n.id)}">${collapsed ? '▸' : '▾'}</span>`
+        : `<span class="chevron empty">·</span>`;
+      let nameHtml = escapeHtml(n.name);
+      if (kind === 'ceo') nameHtml += ` <span class="pill">CEO</span>`;
+      let roleHtml = escapeHtml(n.designation || '');
+      if (n.subject && n.subject !== 'nan') roleHtml += ` · ${escapeHtml(n.subject)}`;
+
+      const metaParts = [];
+      if (!n.isSynthetic) {
+        if (n.id) metaParts.push(`<span class="id">${escapeHtml(n.id)}</span>`);
+        if (n.centreName) metaParts.push(`<span class="badge">${escapeHtml(n.centreName)}</span>`);
+        if (n.status && n.status !== 'Active') metaParts.push(`<span class="badge">${escapeHtml(n.status)}</span>`);
+      } else if (n.count != null) {
+        metaParts.push(`<span class="badge">${n.count} ${n.count === 1 ? 'person' : 'people'}</span>`);
+      } else if (kind === 'bucket' || kind === 'ceo' || kind === 'extmgr') {
+        const c = countRealEmps(n);
+        if (c) metaParts.push(`<span class="badge">${c} ${c === 1 ? 'person' : 'people'}</span>`);
+      }
+      const metaHtml = metaParts.length ? `<div class="meta">${metaParts.join('')}</div>` : '';
+
+      out.push(
+        `<div class="row" data-id="${escapeHtml(n.id)}"${dataKind}${dataStatus}${dataBucket} style="padding-left:${indentPx}px">` +
+          `${chev}<span class="stripe"></span>` +
+          `<span class="name">${nameHtml}</span>` +
+          `<span class="role">${roleHtml}</span>` +
+          metaHtml +
+        `</div>`
+      );
+      if (hasKids) {
+        out.push(`<div class="children${collapsed ? ' collapsed' : ''}" data-parent="${escapeHtml(n.id)}">`);
+        walk(n.children, depth + 1);
+        out.push(`</div>`);
+      }
+    }
+  }
+  walk(roots, 0);
+  return out.join('');
+}
+
+function populateViewSelect() {
+  const family = familySelect.value;
+  const keys = Object.keys(ORG_DATA[family]).sort((a, b) => {
+    const ap = a.startsWith('('), bp = b.startsWith('(');
+    if (ap !== bp) return ap ? 1 : -1;
+    return a.localeCompare(b);
+  });
+  viewSelect.innerHTML = keys.map(k => {
+    const realCount = ORG_DATA[family][k].filter(n => !n.isSynthetic).length;
+    return `<option value="${escapeHtml(k)}">${escapeHtml(k)} (${realCount})</option>`;
+  }).join('');
+}
+
+function render() {
+  const family = familySelect.value;
+  const view = viewSelect.value;
+  const data = ORG_DATA[family][view] || [];
+  const realCount = data.filter(n => !n.isSynthetic).length;
+  titleEl.textContent = view;
+  countEl.textContent = `${realCount} ${realCount === 1 ? 'person' : 'people'}`;
+  const roots = buildTree(data);
+  // Centre views: collapse at Centre level by default (so user sees system → region → centre, expands to see roster).
+  // Department views: expand all by default.
+  const defaultCollapse = new Set(family === 'centre_views' ? ['centre'] : []);
+  treeEl.innerHTML = renderTree(roots, defaultCollapse);
+  applySearch();
+}
+
+treeEl.addEventListener('click', (e) => {
+  const ch = e.target.closest('.chevron');
+  if (!ch || ch.classList.contains('empty')) return;
+  const id = ch.dataset.id;
+  const kids = treeEl.querySelector(`.children[data-parent="${CSS.escape(id)}"]`);
+  if (!kids) return;
+  if (kids.classList.contains('collapsed')) {
+    kids.classList.remove('collapsed');
+    ch.textContent = '▾';
+  } else {
+    kids.classList.add('collapsed');
+    ch.textContent = '▸';
+  }
+});
+
+function applySearch() {
+  const q = searchInput.value.trim().toLowerCase();
+  const rows = treeEl.querySelectorAll('.row');
+  rows.forEach(r => { r.classList.remove('hit'); r.style.display = ''; });
+  if (!q) return;
+
+  const data = ORG_DATA[familySelect.value][viewSelect.value] || [];
+  const byId = new Map(data.map(n => [n.id, n]));
+  const matchIds = new Set();
+  data.forEach(n => {
+    const hay = [n.name, n.id, n.designation, n.centreName, n.subject].filter(Boolean).join(' ').toLowerCase();
+    if (hay.includes(q)) matchIds.add(n.id);
+  });
+  // Show: matches + all ancestors (so context is visible)
+  const showIds = new Set();
+  matchIds.forEach(id => {
+    let cur = byId.get(id);
+    while (cur) {
+      showIds.add(cur.id);
+      cur = cur.parentId ? byId.get(cur.parentId) : null;
+    }
+  });
+  rows.forEach(r => {
+    const id = r.dataset.id;
+    if (!showIds.has(id)) r.style.display = 'none';
+    else if (matchIds.has(id)) r.classList.add('hit');
+  });
+  // Auto-expand any collapsed branch that contains a match
+  treeEl.querySelectorAll('.children.collapsed').forEach(c => {
+    if (showIds.has(c.dataset.parent)) {
+      c.classList.remove('collapsed');
+      const chev = treeEl.querySelector(`.chevron[data-id="${CSS.escape(c.dataset.parent)}"]`);
+      if (chev) chev.textContent = '▾';
+    }
+  });
+}
+
+document.getElementById('expand').addEventListener('click', () => {
+  treeEl.querySelectorAll('.children.collapsed').forEach(c => c.classList.remove('collapsed'));
+  treeEl.querySelectorAll('.chevron').forEach(c => {
+    if (!c.classList.contains('empty')) c.textContent = '▾';
+  });
+});
+document.getElementById('collapse').addEventListener('click', () => {
+  treeEl.querySelectorAll('.children').forEach(c => c.classList.add('collapsed'));
+  treeEl.querySelectorAll('.chevron').forEach(c => {
+    if (!c.classList.contains('empty')) c.textContent = '▸';
+  });
+});
+
+familySelect.addEventListener('change', () => { populateViewSelect(); render(); });
+viewSelect.addEventListener('change', render);
+
+let searchTimer;
+searchInput.addEventListener('input', () => {
+  clearTimeout(searchTimer);
+  searchTimer = setTimeout(applySearch, 150);
+});
+
+fetch('./org_data.json')
+  .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+  .then(d => { ORG_DATA = d; init(); })
+  .catch(e => {
+    document.getElementById('tree').innerHTML =
+      '<div class="empty-state">Failed to load <code>org_data.json</code>: ' + e.message + '</div>';
+  });
+</script>
+</body>
+</html>
