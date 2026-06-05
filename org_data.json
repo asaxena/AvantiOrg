@@ -1241,11 +1241,11 @@
 "reportingToText": "Pritam Sukumar",
 "rmAfId": "AF287",
 "isSynthetic": false,
-"parentId": "__EXT__Data__AF287"
+"parentId": "TBH004"
 },
 {
 "id": "TBH004",
-"name": "TBH - Priyanka Palshetkar",
+"name": "Priyanka Palshetkar",
 "designation": null,
 "status": "Active",
 "staffType": "Non-Teaching Staff",
@@ -1421,7 +1421,7 @@
 "reportingToText": "Akshay Saxena",
 "rmAfId": "AF314",
 "isSynthetic": false,
-"parentId": "__EXT__Fundraising__AF314"
+"parentId": "AF748"
 }
 ],
 "Girls in STEM": [
@@ -13726,6 +13726,19 @@
 "kind": null
 },
 {
+"id": "AF814",
+"name": "Divya Singh",
+"designation": "Head - Grants",
+"status": "Active",
+"centreName": null,
+"subject": null,
+"rmId": null,
+"rmName": null,
+"parentId": "AF748",
+"isSynthetic": false,
+"kind": null
+},
+{
 "id": "AF382",
 "name": "Prafful Chugh",
 "designation": "Head - CSR Partnerships",
@@ -13761,19 +13774,6 @@
 "rmId": null,
 "rmName": null,
 "parentId": "AF382",
-"isSynthetic": false,
-"kind": null
-},
-{
-"id": "AF814",
-"name": "Divya Singh",
-"designation": "Head - Grants",
-"status": "Active",
-"centreName": null,
-"subject": null,
-"rmId": null,
-"rmName": null,
-"parentId": "AF314",
 "isSynthetic": false,
 "kind": null
 },
@@ -13895,21 +13895,8 @@
 "kind": null
 },
 {
-"id": "AF228",
-"name": "Venu Reddy",
-"designation": "Senior Data Analyst",
-"status": "Active",
-"centreName": null,
-"subject": null,
-"rmId": null,
-"rmName": null,
-"parentId": "AF287",
-"isSynthetic": false,
-"kind": null
-},
-{
 "id": "TBH004",
-"name": "TBH - Priyanka Palshetkar",
+"name": "Priyanka Palshetkar",
 "designation": null,
 "status": "Active",
 "centreName": null,
