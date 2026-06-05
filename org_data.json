@@ -1039,7 +1039,7 @@
 "id": "__EXT__Career Services__AF144",
 "parentId": null,
 "name": "Panchali Dutta",
-"designation": "Vice President, Operations  (in Govt PMU)",
+"designation": "Vice President, Strategy and Operations  (in Govt PMU)",
 "isSynthetic": true,
 "kind": "extmgr"
 },
@@ -1429,7 +1429,7 @@
 "id": "__EXT__Girls in STEM__AF144",
 "parentId": null,
 "name": "Panchali Dutta",
-"designation": "Vice President, Operations  (in Govt PMU)",
+"designation": "Vice President, Strategy and Operations  (in Govt PMU)",
 "isSynthetic": true,
 "kind": "extmgr"
 },
@@ -2815,7 +2815,7 @@
 {
 "id": "AF144",
 "name": "Panchali Dutta",
-"designation": "Vice President, Operations",
+"designation": "Vice President, Strategy and Operations",
 "status": "Active",
 "staffType": "Non-Teaching Staff",
 "employmentType": null,
@@ -13455,7 +13455,7 @@
 {
 "id": "AF144",
 "name": "Panchali Dutta",
-"designation": "Vice President, Operations",
+"designation": "Vice President, Strategy and Operations",
 "status": "Active",
 "centreName": null,
 "subject": null,
