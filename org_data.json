@@ -1,7 +1,7 @@
 {
 "meta": {
-"source": "Employee DB sheet — Google Sheet 1jcXJAGl...4XR4kRA",
-"totalEmployees": 427,
+"source": "org_data.json (master) — delinked from the Employee DB Google Sheet; this table is now the source of truth.",
+"totalEmployees": 425,
 "departments": [
 "(No Department)",
 "Academic Product",
@@ -30,7 +30,7 @@
 ],
 "statusCounts": {
 "Active": 309,
-"TBH": 64,
+"TBH": 62,
 "Exit": 17,
 "Offered": 15,
 "Unassigned": 7,
@@ -1422,46 +1422,6 @@
 "rmAfId": "AF314",
 "isSynthetic": false,
 "parentId": "__EXT__Fundraising__AF314"
-},
-{
-"id": "TBH129",
-"name": "TBH - Sr. Manager CSR",
-"designation": "Sr. Manager CSR",
-"status": "TBH",
-"staffType": "Non-Teaching Staff",
-"employmentType": null,
-"dept": "Fundraising",
-"businessUnit": "HO",
-"costCentre": "Fundraising",
-"centreType": null,
-"govtSystem": null,
-"centreRegion": null,
-"centreName": null,
-"subject": null,
-"reportingToText": "Prafful Chugh",
-"rmAfId": "AF382",
-"isSynthetic": false,
-"parentId": "AF382"
-},
-{
-"id": "TBH128",
-"name": "TBH - Sr. Manager Major Grants",
-"designation": "Sr. Manager Major Grants",
-"status": "TBH",
-"staffType": "Non-Teaching Staff",
-"employmentType": null,
-"dept": "Fundraising",
-"businessUnit": "HO",
-"costCentre": "Fundraising",
-"centreType": null,
-"govtSystem": null,
-"centreRegion": null,
-"centreName": null,
-"subject": null,
-"reportingToText": "Ruchika Khemani",
-"rmAfId": "AF748",
-"isSynthetic": false,
-"parentId": "AF748"
 }
 ],
 "Girls in STEM": [
@@ -1551,7 +1511,7 @@
 "reportingToText": "Manvi",
 "rmAfId": "TBH194",
 "isSynthetic": false,
-"parentId": "TBH194"
+"parentId": "__EXT__Girls in STEM__AF104"
 },
 {
 "id": "AF255",
@@ -1592,6 +1552,19 @@
 "rmAfId": "AF762",
 "isSynthetic": false,
 "parentId": "AF762"
+},
+{
+"id": "__EXT__Girls in STEM__AF104",
+"parentId": null,
+"name": "Vishal S",
+"designation": "Associate Director, Product  (in Academic Product)",
+"status": null,
+"kind": "extmgr",
+"isSynthetic": true,
+"centreName": null,
+"subject": null,
+"rmId": null,
+"rmName": null
 }
 ],
 "Govt PMU": [
@@ -13402,6 +13375,19 @@
 "kind": null
 },
 {
+"id": "AF762",
+"name": "Ananya Upadhyay",
+"designation": "Product Manager, Girls in STEM",
+"status": "Active",
+"centreName": null,
+"subject": null,
+"rmId": null,
+"rmName": null,
+"parentId": "AF104",
+"isSynthetic": false,
+"kind": null
+},
+{
 "id": "AF240",
 "name": "Prabhakar Kumar",
 "designation": "Production Manager",
@@ -13740,19 +13726,6 @@
 "kind": null
 },
 {
-"id": "TBH128",
-"name": "TBH - Sr. Manager Major Grants",
-"designation": "Sr. Manager Major Grants",
-"status": "TBH",
-"centreName": null,
-"subject": null,
-"rmId": null,
-"rmName": null,
-"parentId": "AF748",
-"isSynthetic": false,
-"kind": null
-},
-{
 "id": "AF382",
 "name": "Prafful Chugh",
 "designation": "Head - CSR Partnerships",
@@ -13783,19 +13756,6 @@
 "name": "Sarah Alaqband",
 "designation": "Fundraising and Donor Management Specialist",
 "status": "Active",
-"centreName": null,
-"subject": null,
-"rmId": null,
-"rmName": null,
-"parentId": "AF382",
-"isSynthetic": false,
-"kind": null
-},
-{
-"id": "TBH129",
-"name": "TBH - Sr. Manager CSR",
-"designation": "Sr. Manager CSR",
-"status": "TBH",
 "centreName": null,
 "subject": null,
 "rmId": null,
